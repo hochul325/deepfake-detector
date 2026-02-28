@@ -1,9 +1,0 @@
-modality: audio
-model:
-  num_classes: 2
-  weights_file: model.safetensors
-name: wav2vec2-deepfake-audio-detector
-preprocessing:
-  duration_seconds: 6.0
-  sample_rate: 16000
-version: 1.0.0

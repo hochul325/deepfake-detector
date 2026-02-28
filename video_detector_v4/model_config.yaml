@@ -1,9 +1,0 @@
-name: "clip-vit-video-deepfake-detector-v5c"
-version: "5.2.0"
-modality: "video"
-preprocessing:
-  resize: [224, 224]
-  max_frames: 16
-model:
-  num_classes: 2
-  weights_file: "model.safetensors"

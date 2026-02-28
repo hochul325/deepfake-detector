@@ -1,0 +1,10 @@
+name: "clip-vit-image-deepfake-detector-gas"
+version: "3.0.0"
+modality: "image"
+
+preprocessing:
+  resize: [224, 224]
+
+model:
+  num_classes: 2
+  weights_file: "model.safetensors"
