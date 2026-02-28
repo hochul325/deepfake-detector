@@ -3,279 +3,710 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deepfake Detector</title>
+<title>AI Content Detector</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0f1117;
-    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #18181b;
+    color: #f4f4f5;
     min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #00c6ee, #0066cc);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-icon svg { width: 20px; height: 20px; }
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 6px 4px;
+  }
+  .lang-btn {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: #a1a1aa;
+  }
+  .lang-btn.active {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .lang-btn:hover:not(.active) { color: #d4d4d8; }
+
+  /* ---- Hero / Main ---- */
+  .main {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    justify-content: center;
+    min-height: calc(100vh - 160px);
+    padding: 0 24px 60px;
   }
 
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #fff;
+  /* Gradient blob */
+  .gradient-blob {
+    position: absolute;
+    width: 500px;
+    height: 240px;
+    right: -60px;
+    top: -44px;
+    background: linear-gradient(115deg, #00c6ee 20%, #00a8cc 50%, #0066cc 100%);
+    transform: rotate(-10deg);
+    border-radius: 9999px;
+    filter: blur(80px);
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .gradient-blob-2 {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    left: -80px;
+    bottom: 60px;
+    background: linear-gradient(135deg, #0066cc 0%, #00c6ee 100%);
+    transform: rotate(15deg);
+    border-radius: 9999px;
+    filter: blur(100px);
+    opacity: 0.12;
+    pointer-events: none;
   }
 
-  .subtitle {
-    color: #888;
-    margin-bottom: 40px;
-    font-size: 0.95rem;
-  }
-
-  .card {
-    background: #1a1d27;
-    border: 1px solid #2a2d3a;
-    border-radius: 16px;
-    padding: 40px;
-    width: 100%;
-    max-width: 520px;
-  }
-
-  /* Drop zone */
-  .dropzone {
-    border: 2px dashed #3a3d4a;
-    border-radius: 12px;
-    padding: 48px 24px;
+  .hero-text {
     text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-text h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #f4f4f5, #a1a1aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-text p {
+    color: #a1a1aa;
+    font-size: 1.1rem;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ---- Card ---- */
+  .card {
+    position: relative;
+    z-index: 1;
+    background: #27272a;
+    border: 1px solid #3f3f46;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  /* ---- Tabs ---- */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #18181b;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 24px;
+  }
+  .tab {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    background: transparent;
+    color: #71717a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .tab.active {
+    background: #3f3f46;
+    color: #fff;
+  }
+  .tab:hover:not(.active) { color: #a1a1aa; }
+  .tab svg { width: 16px; height: 16px; }
+
+  /* ---- Dropzone ---- */
+  .dropzone {
+    border: 2px dashed #3f3f46;
+    border-radius: 12px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: rgba(24,24,27,0.5);
   }
   .dropzone:hover, .dropzone.dragover {
-    border-color: #646cff;
-    background: rgba(100, 108, 255, 0.05);
+    border-color: #00c6ee;
+    background: rgba(0,198,238,0.04);
   }
   .dropzone-icon {
-    font-size: 2.5rem;
-    margin-bottom: 12px;
-    opacity: 0.5;
+    margin: 0 auto 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(0,198,238,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  .dropzone-icon svg { width: 24px; height: 24px; color: #00c6ee; }
   .dropzone-text {
-    font-size: 1rem;
-    color: #aaa;
+    font-size: 0.95rem;
+    color: #d4d4d8;
     margin-bottom: 8px;
   }
-  .dropzone-hint {
+  .dropzone-text span { color: #00c6ee; font-weight: 600; }
+  .dropzone-formats {
     font-size: 0.8rem;
-    color: #666;
+    color: #71717a;
   }
   .file-input { display: none; }
 
-  /* File info */
-  .file-info {
+  /* ---- File preview ---- */
+  .file-preview {
     display: none;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: #22253a;
-    border-radius: 8px;
     margin-top: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #18181b;
+    border: 1px solid #3f3f46;
   }
-  .file-info.visible { display: flex; }
+  .file-preview.visible { display: block; }
+  .file-preview-img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    background: #09090b;
+    display: block;
+  }
+  .file-preview-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+  }
   .file-name {
     flex: 1;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: #d4d4d8;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .file-badge {
     font-size: 0.7rem;
-    padding: 3px 8px;
-    border-radius: 4px;
+    padding: 3px 10px;
+    border-radius: 9999px;
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
-  .file-badge.image { background: #2d4a3e; color: #6ee7b7; }
-  .file-badge.audio { background: #3a2d4a; color: #c084fc; }
-  .file-badge.video { background: #2d3a4a; color: #7dd3fc; }
+  .file-badge.image { background: rgba(0,198,238,0.15); color: #00c6ee; }
+  .file-badge.audio { background: rgba(168,85,247,0.15); color: #a855f7; }
+  .file-badge.video { background: rgba(59,130,246,0.15); color: #3b82f6; }
+  .file-remove {
+    background: none;
+    border: none;
+    color: #71717a;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    transition: color 0.2s;
+  }
+  .file-remove:hover { color: #ef4444; }
+  .file-remove svg { width: 16px; height: 16px; }
 
-  /* Button */
+  /* ---- Analyze button ---- */
   .analyze-btn {
     display: none;
     width: 100%;
     margin-top: 20px;
-    padding: 14px;
-    font-size: 1rem;
+    padding: 14px 24px;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #fff;
-    background: #646cff;
-    border: none;
+    background: #09090b;
+    border: 1px solid #3f3f46;
     border-radius: 10px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
   }
-  .analyze-btn:hover { background: #535bf2; }
+  .analyze-btn:hover { background: #27272a; }
   .analyze-btn.visible { display: block; }
-  .analyze-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Spinner */
+  /* ---- Spinner ---- */
   .spinner-wrap {
     display: none;
     flex-direction: column;
     align-items: center;
-    margin-top: 28px;
-    gap: 14px;
+    margin-top: 32px;
+    gap: 16px;
   }
   .spinner-wrap.visible { display: flex; }
   .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #2a2d3a;
-    border-top-color: #646cff;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+    border: 3px solid #3f3f46;
+    border-top-color: #00c6ee;
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner-text { color: #888; font-size: 0.9rem; }
+  .spinner-text { color: #71717a; font-size: 0.9rem; }
 
-  /* Result */
+  /* ---- Result ---- */
   .result {
     display: none;
-    text-align: center;
     margin-top: 28px;
   }
   .result.visible { display: block; }
 
-  .verdict {
-    font-size: 2.8rem;
+  .result-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .result-verdict {
+    font-size: 2.2rem;
     font-weight: 800;
-    letter-spacing: 2px;
-    margin-bottom: 6px;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
   }
-  .verdict.real { color: #22c55e; }
-  .verdict.fake { color: #ef4444; }
-
-  .confidence-text {
-    font-size: 1.1rem;
-    color: #aaa;
-    margin-bottom: 20px;
-  }
-  .confidence-text span { color: #fff; font-weight: 600; }
-
-  /* Gauge */
-  .gauge {
-    width: 100%;
-    height: 10px;
-    background: #2a2d3a;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-  .gauge-fill {
-    height: 100%;
-    border-radius: 5px;
-    transition: width 0.5s ease;
-  }
-  .gauge-fill.real { background: linear-gradient(90deg, #22c55e, #16a34a); }
-  .gauge-fill.fake { background: linear-gradient(90deg, #ef4444, #dc2626); }
-
-  .prob-row {
-    display: flex;
-    justify-content: space-between;
+  .result-verdict.real { color: #22c55e; }
+  .result-verdict.fake { color: #ef4444; }
+  .result-sublabel {
     font-size: 0.85rem;
-    color: #888;
+    color: #71717a;
   }
 
-  /* Error */
+  /* Circular gauge */
+  .gauge-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .gauge-ring {
+    position: relative;
+    width: 140px;
+    height: 140px;
+  }
+  .gauge-ring svg { transform: rotate(-90deg); }
+  .gauge-ring-bg { fill: none; stroke: #3f3f46; stroke-width: 8; }
+  .gauge-ring-fill {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s ease;
+  }
+  .gauge-ring-fill.real { stroke: #22c55e; }
+  .gauge-ring-fill.fake { stroke: #ef4444; }
+  .gauge-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .gauge-pct {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .gauge-label {
+    font-size: 0.75rem;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Probability bars */
+  .prob-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .prob-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .prob-label {
+    font-size: 0.85rem;
+    color: #a1a1aa;
+    width: 40px;
+  }
+  .prob-bar-track {
+    flex: 1;
+    height: 8px;
+    background: #3f3f46;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .prob-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .prob-bar-fill.real { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .prob-bar-fill.fake { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  .prob-pct {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #d4d4d8;
+    width: 52px;
+    text-align: right;
+  }
+
+  /* ---- Error ---- */
   .error {
     display: none;
     margin-top: 20px;
     padding: 12px 16px;
-    background: #3a1c1c;
-    border: 1px solid #5c2626;
-    border-radius: 8px;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
     color: #fca5a5;
     font-size: 0.9rem;
+    text-align: center;
   }
   .error.visible { display: block; }
 
+  /* ---- Reset button ---- */
   .reset-btn {
     display: none;
-    margin-top: 20px;
-    padding: 10px 20px;
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px 24px;
     font-size: 0.9rem;
-    color: #aaa;
+    font-weight: 500;
+    color: #a1a1aa;
     background: transparent;
-    border: 1px solid #3a3d4a;
-    border-radius: 8px;
+    border: 1px solid #3f3f46;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
   }
-  .reset-btn:hover { color: #fff; border-color: #646cff; }
-  .reset-btn.visible { display: inline-block; }
+  .reset-btn:hover { color: #fff; border-color: #52525b; }
+  .reset-btn.visible { display: block; }
+
+  /* ---- Footer ---- */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: #52525b;
+    font-size: 0.8rem;
+  }
+  .footer a { color: #00c6ee; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .header { padding: 16px 20px; }
+    .hero-text h1 { font-size: 2rem; }
+    .hero-text p { font-size: 0.95rem; }
+    .card { padding: 20px; margin: 0 4px; }
+    .gradient-blob { width: 300px; height: 150px; right: -40px; }
+  }
 </style>
 </head>
 <body>
 
-<h1>Deepfake Detector</h1>
-<p class="subtitle">Upload an image, audio, or video file to detect AI-generated content</p>
-
-<div class="card">
-  <div class="dropzone" id="dropzone">
-    <div class="dropzone-icon">&#8682;</div>
-    <div class="dropzone-text">Drag & drop a file here, or click to browse</div>
-    <div class="dropzone-hint">Supports: JPG, PNG, MP3, WAV, MP4, AVI, and more</div>
-    <input type="file" class="file-input" id="fileInput"
-      accept=".jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma,.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv">
-  </div>
-
-  <div class="file-info" id="fileInfo">
-    <span class="file-name" id="fileName"></span>
-    <span class="file-badge" id="fileBadge"></span>
-  </div>
-
-  <button class="analyze-btn" id="analyzeBtn">Analyze</button>
-
-  <div class="spinner-wrap" id="spinner">
-    <div class="spinner"></div>
-    <div class="spinner-text">Analyzing with AI...</div>
-  </div>
-
-  <div class="result" id="result">
-    <div class="verdict" id="verdict"></div>
-    <div class="confidence-text"><span id="confidence"></span> confidence</div>
-    <div class="gauge"><div class="gauge-fill" id="gaugeFill"></div></div>
-    <div class="prob-row">
-      <span>Real: <span id="probReal"></span></span>
-      <span>Fake: <span id="probFake"></span></span>
+<!-- Header -->
+<header class="header">
+  <a class="logo" href="/">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
     </div>
+    <span data-i18n="logo">Deepfake Detector</span>
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="langEn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="langKo" onclick="setLang('ko')">KO</button>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="main">
+  <div class="gradient-blob"></div>
+  <div class="gradient-blob-2"></div>
+
+  <div class="hero-text">
+    <h1 data-i18n="title">AI Content Detector</h1>
+    <p data-i18n="subtitle">Upload an image, audio, or video to instantly check if it was generated by AI.</p>
   </div>
 
-  <div class="error" id="error"></div>
-  <button class="reset-btn" id="resetBtn">Analyze another file</button>
-</div>
+  <div class="card">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="image" onclick="setTab('image')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+        </svg>
+        <span data-i18n="tab_image">Image</span>
+      </button>
+      <button class="tab" data-tab="audio" onclick="setTab('audio')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+        </svg>
+        <span data-i18n="tab_audio">Audio</span>
+      </button>
+      <button class="tab" data-tab="video" onclick="setTab('video')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+        </svg>
+        <span data-i18n="tab_video">Video</span>
+      </button>
+    </div>
+
+    <!-- Dropzone -->
+    <div class="dropzone" id="dropzone">
+      <div class="dropzone-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <div class="dropzone-text" data-i18n-html="dropzone_text">Drop your file here or <span>browse</span></div>
+      <div class="dropzone-formats" id="dropzoneFormats" data-i18n="formats_image">JPG, PNG, WebP</div>
+      <input type="file" class="file-input" id="fileInput"
+        accept=".jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma,.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv">
+    </div>
+
+    <!-- File preview -->
+    <div class="file-preview" id="filePreview">
+      <img class="file-preview-img" id="filePreviewImg" src="" alt="" style="display:none">
+      <div class="file-preview-bar">
+        <span class="file-name" id="fileName"></span>
+        <span class="file-badge" id="fileBadge"></span>
+        <button class="file-remove" onclick="reset()" title="Remove">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Analyze button -->
+    <button class="analyze-btn" id="analyzeBtn" data-i18n="analyze_btn">Analyze</button>
+
+    <!-- Spinner -->
+    <div class="spinner-wrap" id="spinner">
+      <div class="spinner"></div>
+      <div class="spinner-text" data-i18n="analyzing">Analyzing with AI...</div>
+    </div>
+
+    <!-- Result -->
+    <div class="result" id="result">
+      <div class="result-header">
+        <div class="result-verdict" id="verdict"></div>
+        <div class="result-sublabel" id="resultSublabel"></div>
+      </div>
+      <div class="gauge-container">
+        <div class="gauge-ring">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle class="gauge-ring-bg" cx="70" cy="70" r="60"/>
+            <circle class="gauge-ring-fill" id="gaugeCircle" cx="70" cy="70" r="60"
+              stroke-dasharray="376.99" stroke-dashoffset="376.99"/>
+          </svg>
+          <div class="gauge-center">
+            <div class="gauge-pct" id="gaugePct">0%</div>
+            <div class="gauge-label" data-i18n="confidence">confidence</div>
+          </div>
+        </div>
+      </div>
+      <div class="prob-bars">
+        <div class="prob-item">
+          <span class="prob-label" data-i18n="real">Real</span>
+          <div class="prob-bar-track"><div class="prob-bar-fill real" id="barReal" style="width:0%"></div></div>
+          <span class="prob-pct" id="pctReal">0%</span>
+        </div>
+        <div class="prob-item">
+          <span class="prob-label" data-i18n="fake">Fake</span>
+          <div class="prob-bar-track"><div class="prob-bar-fill fake" id="barFake" style="width:0%"></div></div>
+          <span class="prob-pct" id="pctFake">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error" id="error"></div>
+
+    <!-- Reset -->
+    <button class="reset-btn" id="resetBtn" onclick="reset()" data-i18n="reset_btn">Analyze another file</button>
+  </div>
+</main>
+
+<footer class="footer">
+  <span data-i18n="footer">Powered by deep learning models on GPU</span>
+</footer>
 
 <script>
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-const fileInfo = document.getElementById('fileInfo');
-const fileName = document.getElementById('fileName');
-const fileBadge = document.getElementById('fileBadge');
-const analyzeBtn = document.getElementById('analyzeBtn');
-const spinner = document.getElementById('spinner');
-const result = document.getElementById('result');
-const verdict = document.getElementById('verdict');
-const confidence = document.getElementById('confidence');
-const gaugeFill = document.getElementById('gaugeFill');
-const probReal = document.getElementById('probReal');
-const probFake = document.getElementById('probFake');
-const errorDiv = document.getElementById('error');
-const resetBtn = document.getElementById('resetBtn');
+// ---- i18n ----
+const LANG = {
+  en: {
+    logo: 'Deepfake Detector',
+    title: 'AI Content Detector',
+    subtitle: 'Upload an image, audio, or video to instantly check if it was generated by AI.',
+    tab_image: 'Image',
+    tab_audio: 'Audio',
+    tab_video: 'Video',
+    dropzone_text: 'Drop your file here or <span>browse</span>',
+    formats_image: 'JPG, PNG, WebP',
+    formats_audio: 'MP3, WAV, FLAC, OGG',
+    formats_video: 'MP4, AVI, MOV, MKV',
+    analyze_btn: 'Analyze',
+    analyze_image: 'Analyze Image',
+    analyze_audio: 'Analyze Audio',
+    analyze_video: 'Analyze Video',
+    analyzing: 'Analyzing with AI...',
+    confidence: 'confidence',
+    real: 'Real',
+    fake: 'Fake',
+    verdict_real: 'Likely Human-Created',
+    verdict_fake: 'Likely AI-Generated',
+    reset_btn: 'Analyze another file',
+    footer: 'Powered by deep learning models on GPU',
+    err_unsupported: 'Unsupported file type. Please upload an image, audio, or video file.',
+    err_wrong_tab: 'This file doesn\'t match the selected tab. Switched to',
+    err_network: 'Network error: ',
+    err_server: 'Server error',
+  },
+  ko: {
+    logo: '\uB525\uD398\uC774\uD06C \uAC10\uC9C0\uAE30',
+    title: 'AI \uCF58\uD150\uCE20 \uAC80\uCD9C\uAE30',
+    subtitle: '\uC774\uBBF8\uC9C0, \uC624\uB514\uC624 \uB610\uB294 \uBE44\uB514\uC624\uB97C \uC5C5\uB85C\uB4DC\uD558\uC5EC AI\uB85C \uC0DD\uC131\uB41C \uCF58\uD150\uCE20\uC778\uC9C0 \uC989\uC2DC \uD655\uC778\uD558\uC138\uC694.',
+    tab_image: '\uC774\uBBF8\uC9C0',
+    tab_audio: '\uC624\uB514\uC624',
+    tab_video: '\uBE44\uB514\uC624',
+    dropzone_text: '\uD30C\uC77C\uC744 \uC5EC\uAE30\uC5D0 \uB4DC\uB86D\uD558\uAC70\uB098 <span>\uCC3E\uC544\uBCF4\uAE30</span>',
+    formats_image: 'JPG, PNG, WebP',
+    formats_audio: 'MP3, WAV, FLAC, OGG',
+    formats_video: 'MP4, AVI, MOV, MKV',
+    analyze_btn: '\uBD84\uC11D\uD558\uAE30',
+    analyze_image: '\uC774\uBBF8\uC9C0 \uBD84\uC11D',
+    analyze_audio: '\uC624\uB514\uC624 \uBD84\uC11D',
+    analyze_video: '\uBE44\uB514\uC624 \uBD84\uC11D',
+    analyzing: 'AI\uB85C \uBD84\uC11D \uC911...',
+    confidence: '\uC2E0\uB8B0\uB3C4',
+    real: '\uC9C4\uC9DC',
+    fake: '\uAC00\uC9DC',
+    verdict_real: '\uC0AC\uB78C\uC774 \uB9CC\uB4E0 \uCF58\uD150\uCE20\uC77C \uAC00\uB2A5\uC131\uC774 \uB192\uC2B5\uB2C8\uB2E4',
+    verdict_fake: 'AI\uB85C \uC0DD\uC131\uB41C \uCF58\uD150\uCE20\uC77C \uAC00\uB2A5\uC131\uC774 \uB192\uC2B5\uB2C8\uB2E4',
+    reset_btn: '\uB2E4\uB978 \uD30C\uC77C \uBD84\uC11D\uD558\uAE30',
+    footer: 'GPU \uAE30\uBC18 \uB525\uB7EC\uB2DD \uBAA8\uB378\uB85C \uAD6C\uB3D9\uB429\uB2C8\uB2E4',
+    err_unsupported: '\uC9C0\uC6D0\uB418\uC9C0 \uC54A\uB294 \uD30C\uC77C \uD615\uC2DD\uC785\uB2C8\uB2E4. \uC774\uBBF8\uC9C0, \uC624\uB514\uC624 \uB610\uB294 \uBE44\uB514\uC624 \uD30C\uC77C\uC744 \uC5C5\uB85C\uB4DC\uD574 \uC8FC\uC138\uC694.',
+    err_wrong_tab: '\uD30C\uC77C\uC774 \uC120\uD0DD\uB41C \uD0ED\uACFC \uC77C\uCE58\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uC804\uD658\uB428:',
+    err_network: '\uB124\uD2B8\uC6CC\uD06C \uC624\uB958: ',
+    err_server: '\uC11C\uBC84 \uC624\uB958',
+  }
+};
 
+let currentLang = 'en';
+let currentTab = 'image';
 let selectedFile = null;
 
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.getElementById('langEn').classList.toggle('active', lang === 'en');
+  document.getElementById('langKo').classList.toggle('active', lang === 'ko');
+
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (LANG[lang][key] !== undefined) el.textContent = LANG[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (LANG[lang][key] !== undefined) el.innerHTML = LANG[lang][key];
+  });
+
+  // Update tab-dependent text
+  updateFormats();
+  updateAnalyzeBtn();
+}
+
+function t(key) { return LANG[currentLang][key] || key; }
+
+// ---- Tabs ----
+const TAB_ACCEPTS = {
+  image: '.jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif',
+  audio: '.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma',
+  video: '.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv',
+};
+
+function setTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.getElementById('fileInput').accept = TAB_ACCEPTS[tab];
+  updateFormats();
+  updateAnalyzeBtn();
+}
+
+function updateFormats() {
+  document.getElementById('dropzoneFormats').textContent = t('formats_' + currentTab);
+}
+
+function updateAnalyzeBtn() {
+  const btn = document.getElementById('analyzeBtn');
+  btn.textContent = t('analyze_' + currentTab);
+}
+
+// ---- File extensions ----
 const IMAGE_EXTS = ['jpg','jpeg','png','webp','bmp','tiff','tif'];
 const AUDIO_EXTS = ['wav','mp3','flac','ogg','m4a','aac','wma'];
 const VIDEO_EXTS = ['mp4','avi','mov','mkv','webm','flv','wmv'];
@@ -288,18 +719,59 @@ function getModality(name) {
   return null;
 }
 
+// ---- DOM refs ----
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const filePreview = document.getElementById('filePreview');
+const filePreviewImg = document.getElementById('filePreviewImg');
+const fileName = document.getElementById('fileName');
+const fileBadge = document.getElementById('fileBadge');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const spinner = document.getElementById('spinner');
+const result = document.getElementById('result');
+const verdict = document.getElementById('verdict');
+const resultSublabel = document.getElementById('resultSublabel');
+const gaugeCircle = document.getElementById('gaugeCircle');
+const gaugePct = document.getElementById('gaugePct');
+const barReal = document.getElementById('barReal');
+const barFake = document.getElementById('barFake');
+const pctReal = document.getElementById('pctReal');
+const pctFake = document.getElementById('pctFake');
+const errorDiv = document.getElementById('error');
+const resetBtn = document.getElementById('resetBtn');
+
+// ---- File selection ----
 function selectFile(file) {
   const modality = getModality(file.name);
   if (!modality) {
-    showError('Unsupported file type. Please upload an image, audio, or video file.');
+    showError(t('err_unsupported'));
     return;
+  }
+  // Auto-switch tab if needed
+  if (modality !== currentTab) {
+    setTab(modality);
   }
   selectedFile = file;
   fileName.textContent = file.name;
-  fileBadge.textContent = modality;
+  fileBadge.textContent = t('tab_' + modality);
   fileBadge.className = 'file-badge ' + modality;
-  fileInfo.classList.add('visible');
+
+  // Show image preview
+  if (modality === 'image') {
+    const reader = new FileReader();
+    reader.onload = e => {
+      filePreviewImg.src = e.target.result;
+      filePreviewImg.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    filePreviewImg.style.display = 'none';
+  }
+
+  filePreview.classList.add('visible');
+  dropzone.style.display = 'none';
   analyzeBtn.classList.add('visible');
+  updateAnalyzeBtn();
   result.classList.remove('visible');
   errorDiv.classList.remove('visible');
   resetBtn.classList.remove('visible');
@@ -315,7 +787,9 @@ function showError(msg) {
 function reset() {
   selectedFile = null;
   fileInput.value = '';
-  fileInfo.classList.remove('visible');
+  filePreview.classList.remove('visible');
+  filePreviewImg.style.display = 'none';
+  dropzone.style.display = '';
   analyzeBtn.classList.remove('visible');
   spinner.classList.remove('visible');
   result.classList.remove('visible');
@@ -323,7 +797,7 @@ function reset() {
   resetBtn.classList.remove('visible');
 }
 
-// Drag & drop
+// ---- Drag & drop ----
 dropzone.addEventListener('click', () => fileInput.click());
 dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
 dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
@@ -336,7 +810,7 @@ fileInput.addEventListener('change', () => {
   if (fileInput.files.length) selectFile(fileInput.files[0]);
 });
 
-// Analyze
+// ---- Analyze ----
 analyzeBtn.addEventListener('click', async () => {
   if (!selectedFile) return;
   analyzeBtn.disabled = true;
@@ -352,29 +826,44 @@ analyzeBtn.addEventListener('click', async () => {
     const resp = await fetch('/api/detect', { method: 'POST', body: form });
     const data = await resp.json();
     if (!resp.ok) {
-      showError(data.detail || 'Server error');
+      showError(data.detail || t('err_server'));
       analyzeBtn.disabled = false;
       return;
     }
     spinner.classList.remove('visible');
 
     const v = data.verdict;
+    const conf = data.confidence;
+    const isReal = v === 'REAL';
+
     verdict.textContent = v;
-    verdict.className = 'verdict ' + v.toLowerCase();
-    confidence.textContent = data.confidence + '%';
-    gaugeFill.style.width = data.confidence + '%';
-    gaugeFill.className = 'gauge-fill ' + v.toLowerCase();
-    probReal.textContent = data.probabilities.real + '%';
-    probFake.textContent = data.probabilities.fake + '%';
+    verdict.className = 'result-verdict ' + v.toLowerCase();
+    resultSublabel.textContent = isReal ? t('verdict_real') : t('verdict_fake');
+
+    // Circular gauge
+    const circumference = 2 * Math.PI * 60; // r=60
+    const offset = circumference - (conf / 100) * circumference;
+    gaugeCircle.style.strokeDashoffset = offset;
+    gaugeCircle.className.baseVal = 'gauge-ring-fill ' + v.toLowerCase();
+    gaugePct.textContent = conf + '%';
+
+    // Probability bars
+    barReal.style.width = data.probabilities.real + '%';
+    barFake.style.width = data.probabilities.fake + '%';
+    pctReal.textContent = data.probabilities.real + '%';
+    pctFake.textContent = data.probabilities.fake + '%';
+
     result.classList.add('visible');
     resetBtn.classList.add('visible');
   } catch (e) {
-    showError('Network error: ' + e.message);
+    showError(t('err_network') + e.message);
   }
   analyzeBtn.disabled = false;
 });
 
-resetBtn.addEventListener('click', reset);
+// ---- Init ----
+updateFormats();
+updateAnalyzeBtn();
 </script>
 </body>
 </html>
