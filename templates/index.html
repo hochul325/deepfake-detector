@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deepfake Detector</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f1117;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .subtitle {
+    color: #888;
+    margin-bottom: 40px;
+    font-size: 0.95rem;
+  }
+
+  .card {
+    background: #1a1d27;
+    border: 1px solid #2a2d3a;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  /* Drop zone */
+  .dropzone {
+    border: 2px dashed #3a3d4a;
+    border-radius: 12px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dropzone:hover, .dropzone.dragover {
+    border-color: #646cff;
+    background: rgba(100, 108, 255, 0.05);
+  }
+  .dropzone-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+  .dropzone-text {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  .dropzone-hint {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  .file-input { display: none; }
+
+  /* File info */
+  .file-info {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #22253a;
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+  .file-info.visible { display: flex; }
+  .file-name {
+    flex: 1;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .file-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .file-badge.image { background: #2d4a3e; color: #6ee7b7; }
+  .file-badge.audio { background: #3a2d4a; color: #c084fc; }
+  .file-badge.video { background: #2d3a4a; color: #7dd3fc; }
+
+  /* Button */
+  .analyze-btn {
+    display: none;
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: #646cff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .analyze-btn:hover { background: #535bf2; }
+  .analyze-btn.visible { display: block; }
+  .analyze-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Spinner */
+  .spinner-wrap {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 28px;
+    gap: 14px;
+  }
+  .spinner-wrap.visible { display: flex; }
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #2a2d3a;
+    border-top-color: #646cff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner-text { color: #888; font-size: 0.9rem; }
+
+  /* Result */
+  .result {
+    display: none;
+    text-align: center;
+    margin-top: 28px;
+  }
+  .result.visible { display: block; }
+
+  .verdict {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .verdict.real { color: #22c55e; }
+  .verdict.fake { color: #ef4444; }
+
+  .confidence-text {
+    font-size: 1.1rem;
+    color: #aaa;
+    margin-bottom: 20px;
+  }
+  .confidence-text span { color: #fff; font-weight: 600; }
+
+  /* Gauge */
+  .gauge {
+    width: 100%;
+    height: 10px;
+    background: #2a2d3a;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .gauge-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease;
+  }
+  .gauge-fill.real { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .gauge-fill.fake { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+  .prob-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  /* Error */
+  .error {
+    display: none;
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: #3a1c1c;
+    border: 1px solid #5c2626;
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.9rem;
+  }
+  .error.visible { display: block; }
+
+  .reset-btn {
+    display: none;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    color: #aaa;
+    background: transparent;
+    border: 1px solid #3a3d4a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { color: #fff; border-color: #646cff; }
+  .reset-btn.visible { display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>Deepfake Detector</h1>
+<p class="subtitle">Upload an image, audio, or video file to detect AI-generated content</p>
+
+<div class="card">
+  <div class="dropzone" id="dropzone">
+    <div class="dropzone-icon">&#8682;</div>
+    <div class="dropzone-text">Drag & drop a file here, or click to browse</div>
+    <div class="dropzone-hint">Supports: JPG, PNG, MP3, WAV, MP4, AVI, and more</div>
+    <input type="file" class="file-input" id="fileInput"
+      accept=".jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma,.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv">
+  </div>
+
+  <div class="file-info" id="fileInfo">
+    <span class="file-name" id="fileName"></span>
+    <span class="file-badge" id="fileBadge"></span>
+  </div>
+
+  <button class="analyze-btn" id="analyzeBtn">Analyze</button>
+
+  <div class="spinner-wrap" id="spinner">
+    <div class="spinner"></div>
+    <div class="spinner-text">Analyzing with AI...</div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="verdict" id="verdict"></div>
+    <div class="confidence-text"><span id="confidence"></span> confidence</div>
+    <div class="gauge"><div class="gauge-fill" id="gaugeFill"></div></div>
+    <div class="prob-row">
+      <span>Real: <span id="probReal"></span></span>
+      <span>Fake: <span id="probFake"></span></span>
+    </div>
+  </div>
+
+  <div class="error" id="error"></div>
+  <button class="reset-btn" id="resetBtn">Analyze another file</button>
+</div>
+
+<script>
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const fileName = document.getElementById('fileName');
+const fileBadge = document.getElementById('fileBadge');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const spinner = document.getElementById('spinner');
+const result = document.getElementById('result');
+const verdict = document.getElementById('verdict');
+const confidence = document.getElementById('confidence');
+const gaugeFill = document.getElementById('gaugeFill');
+const probReal = document.getElementById('probReal');
+const probFake = document.getElementById('probFake');
+const errorDiv = document.getElementById('error');
+const resetBtn = document.getElementById('resetBtn');
+
+let selectedFile = null;
+
+const IMAGE_EXTS = ['jpg','jpeg','png','webp','bmp','tiff','tif'];
+const AUDIO_EXTS = ['wav','mp3','flac','ogg','m4a','aac','wma'];
+const VIDEO_EXTS = ['mp4','avi','mov','mkv','webm','flv','wmv'];
+
+function getModality(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  if (IMAGE_EXTS.includes(ext)) return 'image';
+  if (AUDIO_EXTS.includes(ext)) return 'audio';
+  if (VIDEO_EXTS.includes(ext)) return 'video';
+  return null;
+}
+
+function selectFile(file) {
+  const modality = getModality(file.name);
+  if (!modality) {
+    showError('Unsupported file type. Please upload an image, audio, or video file.');
+    return;
+  }
+  selectedFile = file;
+  fileName.textContent = file.name;
+  fileBadge.textContent = modality;
+  fileBadge.className = 'file-badge ' + modality;
+  fileInfo.classList.add('visible');
+  analyzeBtn.classList.add('visible');
+  result.classList.remove('visible');
+  errorDiv.classList.remove('visible');
+  resetBtn.classList.remove('visible');
+}
+
+function showError(msg) {
+  errorDiv.textContent = msg;
+  errorDiv.classList.add('visible');
+  spinner.classList.remove('visible');
+  resetBtn.classList.add('visible');
+}
+
+function reset() {
+  selectedFile = null;
+  fileInput.value = '';
+  fileInfo.classList.remove('visible');
+  analyzeBtn.classList.remove('visible');
+  spinner.classList.remove('visible');
+  result.classList.remove('visible');
+  errorDiv.classList.remove('visible');
+  resetBtn.classList.remove('visible');
+}
+
+// Drag & drop
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) selectFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) selectFile(fileInput.files[0]);
+});
+
+// Analyze
+analyzeBtn.addEventListener('click', async () => {
+  if (!selectedFile) return;
+  analyzeBtn.disabled = true;
+  analyzeBtn.classList.remove('visible');
+  spinner.classList.add('visible');
+  result.classList.remove('visible');
+  errorDiv.classList.remove('visible');
+
+  const form = new FormData();
+  form.append('file', selectedFile);
+
+  try {
+    const resp = await fetch('/api/detect', { method: 'POST', body: form });
+    const data = await resp.json();
+    if (!resp.ok) {
+      showError(data.detail || 'Server error');
+      analyzeBtn.disabled = false;
+      return;
+    }
+    spinner.classList.remove('visible');
+
+    const v = data.verdict;
+    verdict.textContent = v;
+    verdict.className = 'verdict ' + v.toLowerCase();
+    confidence.textContent = data.confidence + '%';
+    gaugeFill.style.width = data.confidence + '%';
+    gaugeFill.className = 'gauge-fill ' + v.toLowerCase();
+    probReal.textContent = data.probabilities.real + '%';
+    probFake.textContent = data.probabilities.fake + '%';
+    result.classList.add('visible');
+    resetBtn.classList.add('visible');
+  } catch (e) {
+    showError('Network error: ' + e.message);
+  }
+  analyzeBtn.disabled = false;
+});
+
+resetBtn.addEventListener('click', reset);
+</script>
+</body>
+</html>
