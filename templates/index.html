@@ -34,437 +34,331 @@
     text-decoration: none;
   }
   .logo-icon {
-    width: 32px;
-    height: 32px;
+    width: 32px; height: 32px;
     background: linear-gradient(135deg, #00c6ee, #0066cc);
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
   .logo-icon svg { width: 20px; height: 20px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .rate-badge {
+    font-size: 0.75rem;
+    color: #71717a;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #3f3f46;
+    border-radius: 9999px;
+    padding: 4px 12px;
+    display: none;
+  }
+  .rate-badge.visible { display: inline-block; }
+  .rate-badge span { color: #00c6ee; font-weight: 600; }
   .lang-toggle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
-    padding: 6px 4px;
+    padding: 4px;
   }
   .lang-btn {
-    padding: 5px 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
-    color: #a1a1aa;
+    padding: 5px 12px; border: none; border-radius: 6px;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; background: transparent; color: #71717a;
   }
-  .lang-btn.active {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-  }
-  .lang-btn:hover:not(.active) { color: #d4d4d8; }
+  .lang-btn.active { background: rgba(255,255,255,0.12); color: #fff; }
+  .lang-btn:hover:not(.active) { color: #a1a1aa; }
 
-  /* ---- Hero / Main ---- */
+  /* ---- Main ---- */
   .main {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 160px);
-    padding: 0 24px 60px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start;
+    padding: 20px 24px 40px;
   }
-
-  /* Gradient blob */
   .gradient-blob {
-    position: absolute;
-    width: 500px;
-    height: 240px;
-    right: -60px;
-    top: -44px;
+    position: absolute; width: 500px; height: 240px; right: -60px; top: -44px;
     background: linear-gradient(115deg, #00c6ee 20%, #00a8cc 50%, #0066cc 100%);
-    transform: rotate(-10deg);
-    border-radius: 9999px;
-    filter: blur(80px);
-    opacity: 0.25;
-    pointer-events: none;
+    transform: rotate(-10deg); border-radius: 9999px;
+    filter: blur(80px); opacity: 0.2; pointer-events: none;
   }
   .gradient-blob-2 {
-    position: absolute;
-    width: 300px;
-    height: 200px;
-    left: -80px;
-    bottom: 60px;
-    background: linear-gradient(135deg, #0066cc 0%, #00c6ee 100%);
-    transform: rotate(15deg);
-    border-radius: 9999px;
-    filter: blur(100px);
-    opacity: 0.12;
-    pointer-events: none;
+    position: absolute; width: 300px; height: 200px; left: -80px; bottom: 100px;
+    background: linear-gradient(135deg, #0066cc, #00c6ee);
+    transform: rotate(15deg); border-radius: 9999px;
+    filter: blur(100px); opacity: 0.1; pointer-events: none;
   }
 
-  .hero-text {
-    text-align: center;
-    margin-bottom: 40px;
-    position: relative;
-    z-index: 1;
-  }
+  .hero-text { text-align: center; margin-bottom: 32px; position: relative; z-index: 1; }
   .hero-text h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
+    font-size: 2.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px;
     background: linear-gradient(to right, #f4f4f5, #a1a1aa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .hero-text p {
-    color: #a1a1aa;
-    font-size: 1.1rem;
-    max-width: 480px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
+  .hero-text p { color: #a1a1aa; font-size: 1.05rem; max-width: 480px; margin: 0 auto; line-height: 1.6; }
 
   /* ---- Card ---- */
   .card {
-    position: relative;
-    z-index: 1;
-    background: #27272a;
-    border: 1px solid #3f3f46;
-    border-radius: 16px;
-    padding: 32px;
-    width: 100%;
-    max-width: 560px;
+    position: relative; z-index: 1;
+    background: #27272a; border: 1px solid #3f3f46; border-radius: 16px;
+    padding: 28px; width: 100%; max-width: 560px;
   }
 
   /* ---- Tabs ---- */
   .tabs {
-    display: flex;
-    gap: 4px;
-    background: #18181b;
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 24px;
+    display: flex; gap: 4px;
+    background: #18181b; border-radius: 10px; padding: 4px; margin-bottom: 20px;
   }
   .tab {
-    flex: 1;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
-    color: #71717a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    flex: 1; padding: 9px 14px; border: none; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; background: transparent; color: #71717a;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
   }
-  .tab.active {
-    background: #3f3f46;
-    color: #fff;
-  }
+  .tab.active { background: #3f3f46; color: #fff; }
   .tab:hover:not(.active) { color: #a1a1aa; }
-  .tab svg { width: 16px; height: 16px; }
+  .tab svg { width: 15px; height: 15px; }
 
   /* ---- Dropzone ---- */
   .dropzone {
-    border: 2px dashed #3f3f46;
-    border-radius: 12px;
-    padding: 40px 24px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.25s;
+    border: 2px dashed #3f3f46; border-radius: 12px; padding: 36px 24px;
+    text-align: center; cursor: pointer; transition: all 0.25s;
     background: rgba(24,24,27,0.5);
   }
-  .dropzone:hover, .dropzone.dragover {
-    border-color: #00c6ee;
-    background: rgba(0,198,238,0.04);
-  }
+  .dropzone:hover, .dropzone.dragover { border-color: #00c6ee; background: rgba(0,198,238,0.04); }
   .dropzone-icon {
-    margin: 0 auto 16px;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    margin: 0 auto 14px; width: 44px; height: 44px; border-radius: 11px;
     background: rgba(0,198,238,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
-  .dropzone-icon svg { width: 24px; height: 24px; color: #00c6ee; }
-  .dropzone-text {
-    font-size: 0.95rem;
-    color: #d4d4d8;
-    margin-bottom: 8px;
-  }
+  .dropzone-icon svg { width: 22px; height: 22px; color: #00c6ee; }
+  .dropzone-text { font-size: 0.92rem; color: #d4d4d8; margin-bottom: 6px; }
   .dropzone-text span { color: #00c6ee; font-weight: 600; }
-  .dropzone-formats {
-    font-size: 0.8rem;
-    color: #71717a;
-  }
+  .dropzone-formats { font-size: 0.78rem; color: #52525b; }
   .file-input { display: none; }
+
+  /* ---- Examples ---- */
+  .examples-section { margin-top: 16px; }
+  .examples-label {
+    font-size: 0.78rem; color: #52525b; text-transform: uppercase;
+    letter-spacing: 1px; font-weight: 600; margin-bottom: 10px;
+  }
+  .examples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .example-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 10px 6px; background: #18181b; border: 1px solid #3f3f46;
+    border-radius: 10px; cursor: pointer; transition: all 0.2s;
+    color: #a1a1aa; font-size: 0.75rem; font-weight: 500;
+  }
+  .example-btn:hover { border-color: #00c6ee; color: #d4d4d8; background: rgba(0,198,238,0.04); }
+  .example-btn.loading { opacity: 0.5; pointer-events: none; }
+  .example-icon {
+    width: 32px; height: 32px; border-radius: 8px; overflow: hidden;
+    background: #27272a; display: flex; align-items: center; justify-content: center;
+  }
+  .example-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .example-icon svg { width: 16px; height: 16px; color: #52525b; }
+  .example-dot {
+    width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 4px;
+  }
+  .example-dot.real { background: #22c55e; }
+  .example-dot.fake { background: #ef4444; }
 
   /* ---- File preview ---- */
   .file-preview {
-    display: none;
-    margin-top: 16px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #18181b;
-    border: 1px solid #3f3f46;
+    display: none; margin-top: 0; border-radius: 12px; overflow: hidden;
+    background: #18181b; border: 1px solid #3f3f46;
   }
   .file-preview.visible { display: block; }
-  .file-preview-img {
-    width: 100%;
-    max-height: 240px;
-    object-fit: contain;
-    background: #09090b;
-    display: block;
+  .file-preview-media {
+    width: 100%; max-height: 220px; object-fit: contain; background: #09090b; display: block;
   }
-  .file-preview-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-  }
+  .file-preview-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
   .file-name {
-    flex: 1;
-    font-size: 0.85rem;
-    color: #d4d4d8;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    flex: 1; font-size: 0.82rem; color: #d4d4d8;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .file-badge {
-    font-size: 0.7rem;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 0.68rem; padding: 2px 9px; border-radius: 9999px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
   }
   .file-badge.image { background: rgba(0,198,238,0.15); color: #00c6ee; }
   .file-badge.audio { background: rgba(168,85,247,0.15); color: #a855f7; }
   .file-badge.video { background: rgba(59,130,246,0.15); color: #3b82f6; }
   .file-remove {
-    background: none;
-    border: none;
-    color: #71717a;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    display: flex;
-    transition: color 0.2s;
+    background: none; border: none; color: #52525b; cursor: pointer;
+    padding: 4px; border-radius: 4px; display: flex; transition: color 0.2s;
   }
   .file-remove:hover { color: #ef4444; }
-  .file-remove svg { width: 16px; height: 16px; }
+  .file-remove svg { width: 15px; height: 15px; }
 
   /* ---- Analyze button ---- */
   .analyze-btn {
-    display: none;
-    width: 100%;
-    margin-top: 20px;
-    padding: 14px 24px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #fff;
-    background: #09090b;
-    border: 1px solid #3f3f46;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
+    display: none; width: 100%; margin-top: 16px; padding: 13px 24px;
+    font-size: 0.92rem; font-weight: 600; color: #fff;
+    background: #09090b; border: 1px solid #3f3f46; border-radius: 10px;
+    cursor: pointer; transition: all 0.2s;
   }
   .analyze-btn:hover { background: #27272a; }
   .analyze-btn.visible { display: block; }
   .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+  /* ---- Upload progress ---- */
+  .upload-progress {
+    display: none; margin-top: 16px;
+  }
+  .upload-progress.visible { display: block; }
+  .upload-progress-label {
+    font-size: 0.8rem; color: #71717a; margin-bottom: 8px;
+    display: flex; justify-content: space-between;
+  }
+  .upload-progress-track {
+    width: 100%; height: 6px; background: #3f3f46; border-radius: 3px; overflow: hidden;
+  }
+  .upload-progress-fill {
+    height: 100%; background: linear-gradient(90deg, #00c6ee, #0066cc);
+    border-radius: 3px; transition: width 0.15s; width: 0%;
+  }
+
   /* ---- Spinner ---- */
   .spinner-wrap {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 32px;
-    gap: 16px;
+    display: none; flex-direction: column; align-items: center;
+    margin-top: 28px; gap: 14px;
   }
   .spinner-wrap.visible { display: flex; }
   .spinner {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 3px solid #3f3f46;
-    border-top-color: #00c6ee;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid #3f3f46; border-top-color: #00c6ee;
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner-text { color: #71717a; font-size: 0.9rem; }
+  .spinner-text { color: #52525b; font-size: 0.85rem; }
 
   /* ---- Result ---- */
-  .result {
-    display: none;
-    margin-top: 28px;
-  }
+  .result { display: none; margin-top: 24px; }
   .result.visible { display: block; }
-
-  .result-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .result-verdict {
-    font-size: 2.2rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
+  .result-header { text-align: center; margin-bottom: 20px; }
+  .result-verdict { font-size: 2rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; }
   .result-verdict.real { color: #22c55e; }
   .result-verdict.fake { color: #ef4444; }
-  .result-sublabel {
-    font-size: 0.85rem;
-    color: #71717a;
-  }
+  .result-sublabel { font-size: 0.82rem; color: #52525b; }
 
-  /* Circular gauge */
-  .gauge-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
-  }
-  .gauge-ring {
-    position: relative;
-    width: 140px;
-    height: 140px;
-  }
+  .gauge-container { display: flex; justify-content: center; margin-bottom: 20px; }
+  .gauge-ring { position: relative; width: 130px; height: 130px; }
   .gauge-ring svg { transform: rotate(-90deg); }
-  .gauge-ring-bg { fill: none; stroke: #3f3f46; stroke-width: 8; }
+  .gauge-ring-bg { fill: none; stroke: #3f3f46; stroke-width: 7; }
   .gauge-ring-fill {
-    fill: none;
-    stroke-width: 8;
-    stroke-linecap: round;
+    fill: none; stroke-width: 7; stroke-linecap: round;
     transition: stroke-dashoffset 0.8s ease;
   }
   .gauge-ring-fill.real { stroke: #22c55e; }
   .gauge-ring-fill.fake { stroke: #ef4444; }
   .gauge-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .gauge-pct {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #fff;
-  }
-  .gauge-label {
-    font-size: 0.75rem;
-    color: #71717a;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+  .gauge-pct { font-size: 1.6rem; font-weight: 700; color: #fff; }
+  .gauge-label { font-size: 0.7rem; color: #52525b; text-transform: uppercase; letter-spacing: 1px; }
 
-  /* Probability bars */
-  .prob-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .prob-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .prob-label {
-    font-size: 0.85rem;
-    color: #a1a1aa;
-    width: 40px;
-  }
-  .prob-bar-track {
-    flex: 1;
-    height: 8px;
-    background: #3f3f46;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .prob-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.6s ease;
-  }
+  .prob-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .prob-item { display: flex; align-items: center; gap: 10px; }
+  .prob-label { font-size: 0.82rem; color: #71717a; width: 36px; }
+  .prob-bar-track { flex: 1; height: 7px; background: #3f3f46; border-radius: 4px; overflow: hidden; }
+  .prob-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
   .prob-bar-fill.real { background: linear-gradient(90deg, #22c55e, #16a34a); }
   .prob-bar-fill.fake { background: linear-gradient(90deg, #ef4444, #dc2626); }
-  .prob-pct {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #d4d4d8;
-    width: 52px;
-    text-align: right;
+  .prob-pct { font-size: 0.82rem; font-weight: 600; color: #a1a1aa; width: 48px; text-align: right; }
+
+  /* Details grid */
+  .result-details {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    background: #18181b; border-radius: 10px; padding: 12px;
   }
+  .detail-item { text-align: center; }
+  .detail-label { font-size: 0.68rem; color: #52525b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .detail-value { font-size: 0.85rem; font-weight: 600; color: #d4d4d8; }
 
   /* ---- Error ---- */
   .error {
-    display: none;
-    margin-top: 20px;
-    padding: 12px 16px;
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.25);
-    border-radius: 10px;
-    color: #fca5a5;
-    font-size: 0.9rem;
-    text-align: center;
+    display: none; margin-top: 16px; padding: 11px 16px;
+    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; color: #fca5a5; font-size: 0.85rem; text-align: center;
   }
   .error.visible { display: block; }
 
   /* ---- Reset button ---- */
   .reset-btn {
-    display: none;
-    width: 100%;
-    margin-top: 16px;
-    padding: 12px 24px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #a1a1aa;
-    background: transparent;
-    border: 1px solid #3f3f46;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
+    display: none; width: 100%; margin-top: 12px; padding: 11px 24px;
+    font-size: 0.85rem; font-weight: 500; color: #71717a;
+    background: transparent; border: 1px solid #3f3f46; border-radius: 10px;
+    cursor: pointer; transition: all 0.2s;
   }
-  .reset-btn:hover { color: #fff; border-color: #52525b; }
+  .reset-btn:hover { color: #d4d4d8; border-color: #52525b; }
   .reset-btn.visible { display: block; }
+
+  /* ---- History ---- */
+  .history-section {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px; margin-top: 24px;
+  }
+  .history-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .history-title { font-size: 0.82rem; font-weight: 600; color: #52525b; text-transform: uppercase; letter-spacing: 1px; }
+  .history-clear {
+    font-size: 0.75rem; color: #52525b; background: none; border: none;
+    cursor: pointer; transition: color 0.2s;
+  }
+  .history-clear:hover { color: #a1a1aa; }
+  .history-list { display: flex; flex-direction: column; gap: 6px; }
+  .history-item {
+    display: flex; align-items: center; gap: 12px;
+    background: #27272a; border: 1px solid #3f3f46; border-radius: 10px;
+    padding: 10px 14px; transition: border-color 0.2s;
+  }
+  .history-item:hover { border-color: #52525b; }
+  .history-verdict {
+    font-size: 0.75rem; font-weight: 700; padding: 3px 8px;
+    border-radius: 6px; letter-spacing: 0.5px; min-width: 48px; text-align: center;
+  }
+  .history-verdict.real { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .history-verdict.fake { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .history-info { flex: 1; min-width: 0; }
+  .history-name {
+    font-size: 0.82rem; color: #d4d4d8;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .history-meta { font-size: 0.72rem; color: #52525b; }
+  .history-conf { font-size: 0.85rem; font-weight: 600; color: #a1a1aa; }
 
   /* ---- Footer ---- */
   .footer {
-    text-align: center;
-    padding: 24px;
-    color: #52525b;
-    font-size: 0.8rem;
+    position: relative; z-index: 1;
+    text-align: center; padding: 24px; color: #3f3f46; font-size: 0.78rem;
   }
-  .footer a { color: #00c6ee; text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
+
+  /* ---- Privacy banner ---- */
+  .privacy-note {
+    position: relative; z-index: 1;
+    text-align: center; margin-top: 16px;
+    font-size: 0.75rem; color: #3f3f46;
+    max-width: 560px;
+  }
+  .privacy-note svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 3px; }
 
   /* ---- Responsive ---- */
   @media (max-width: 640px) {
-    .header { padding: 16px 20px; }
-    .hero-text h1 { font-size: 2rem; }
-    .hero-text p { font-size: 0.95rem; }
-    .card { padding: 20px; margin: 0 4px; }
-    .gradient-blob { width: 300px; height: 150px; right: -40px; }
+    .header { padding: 14px 16px; }
+    .hero-text h1 { font-size: 1.8rem; }
+    .hero-text p { font-size: 0.9rem; }
+    .card { padding: 18px; margin: 0 4px; }
+    .gradient-blob { width: 280px; height: 140px; right: -30px; }
+    .examples-grid { grid-template-columns: repeat(2, 1fr); }
+    .result-details { grid-template-columns: repeat(3, 1fr); padding: 10px 8px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <header class="header">
   <a class="logo" href="/">
     <div class="logo-icon">
@@ -474,13 +368,15 @@
     </div>
     <span data-i18n="logo">Deepfake Detector</span>
   </a>
-  <div class="lang-toggle">
-    <button class="lang-btn active" id="langEn" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" id="langKo" onclick="setLang('ko')">KO</button>
+  <div class="header-right">
+    <div class="rate-badge" id="rateBadge"><span id="rateCount">10</span> / 10 <span data-i18n="remaining">remaining today</span></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="langKo" onclick="setLang('ko')">KO</button>
+    </div>
   </div>
 </header>
 
-<!-- Main -->
 <main class="main">
   <div class="gradient-blob"></div>
   <div class="gradient-blob-2"></div>
@@ -491,24 +387,17 @@
   </div>
 
   <div class="card">
-    <!-- Tabs -->
     <div class="tabs">
       <button class="tab active" data-tab="image" onclick="setTab('image')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
         <span data-i18n="tab_image">Image</span>
       </button>
       <button class="tab" data-tab="audio" onclick="setTab('audio')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
         <span data-i18n="tab_audio">Audio</span>
       </button>
       <button class="tab" data-tab="video" onclick="setTab('video')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
         <span data-i18n="tab_video">Video</span>
       </button>
     </div>
@@ -516,32 +405,43 @@
     <!-- Dropzone -->
     <div class="dropzone" id="dropzone">
       <div class="dropzone-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
       <div class="dropzone-text" data-i18n-html="dropzone_text">Drop your file here or <span>browse</span></div>
-      <div class="dropzone-formats" id="dropzoneFormats" data-i18n="formats_image">JPG, PNG, WebP</div>
-      <input type="file" class="file-input" id="fileInput"
-        accept=".jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma,.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv">
+      <div class="dropzone-formats" id="dropzoneFormats">JPG, PNG, WebP</div>
+      <input type="file" class="file-input" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma,.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv">
+    </div>
+
+    <!-- Examples -->
+    <div class="examples-section" id="examplesSection">
+      <div class="examples-label" data-i18n="try_examples">Try an example</div>
+      <div class="examples-grid" id="examplesGrid"></div>
     </div>
 
     <!-- File preview -->
     <div class="file-preview" id="filePreview">
-      <img class="file-preview-img" id="filePreviewImg" src="" alt="" style="display:none">
+      <img class="file-preview-media" id="filePreviewImg" src="" alt="" style="display:none">
       <div class="file-preview-bar">
         <span class="file-name" id="fileName"></span>
         <span class="file-badge" id="fileBadge"></span>
         <button class="file-remove" onclick="reset()" title="Remove">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Analyze button -->
-    <button class="analyze-btn" id="analyzeBtn" data-i18n="analyze_btn">Analyze</button>
+    <button class="analyze-btn" id="analyzeBtn">Analyze Image</button>
+
+    <!-- Upload progress -->
+    <div class="upload-progress" id="uploadProgress">
+      <div class="upload-progress-label">
+        <span data-i18n="uploading">Uploading...</span>
+        <span id="uploadPct">0%</span>
+      </div>
+      <div class="upload-progress-track">
+        <div class="upload-progress-fill" id="uploadFill"></div>
+      </div>
+    </div>
 
     <!-- Spinner -->
     <div class="spinner-wrap" id="spinner">
@@ -557,10 +457,9 @@
       </div>
       <div class="gauge-container">
         <div class="gauge-ring">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle class="gauge-ring-bg" cx="70" cy="70" r="60"/>
-            <circle class="gauge-ring-fill" id="gaugeCircle" cx="70" cy="70" r="60"
-              stroke-dasharray="376.99" stroke-dashoffset="376.99"/>
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle class="gauge-ring-bg" cx="65" cy="65" r="55"/>
+            <circle class="gauge-ring-fill" id="gaugeCircle" cx="65" cy="65" r="55" stroke-dasharray="345.58" stroke-dashoffset="345.58"/>
           </svg>
           <div class="gauge-center">
             <div class="gauge-pct" id="gaugePct">0%</div>
@@ -580,18 +479,45 @@
           <span class="prob-pct" id="pctFake">0%</span>
         </div>
       </div>
+      <div class="result-details" id="resultDetails">
+        <div class="detail-item">
+          <div class="detail-label" data-i18n="model">Model</div>
+          <div class="detail-value" id="detailModel">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label" data-i18n="time">Time</div>
+          <div class="detail-value" id="detailTime">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label" data-i18n="file_size">File Size</div>
+          <div class="detail-value" id="detailSize">-</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Error -->
     <div class="error" id="error"></div>
-
-    <!-- Reset -->
     <button class="reset-btn" id="resetBtn" onclick="reset()" data-i18n="reset_btn">Analyze another file</button>
+  </div>
+
+  <p class="privacy-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span data-i18n="privacy">Your files are processed on GPU and deleted immediately. Nothing is stored.</span>
+  </p>
+
+  <!-- History -->
+  <div class="history-section" id="historySection" style="display:none">
+    <div class="history-header">
+      <div class="history-title" data-i18n="recent_history">Recent History</div>
+      <button class="history-clear" onclick="clearHistory()" data-i18n="clear_history">Clear</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
   </div>
 </main>
 
 <footer class="footer">
   <span data-i18n="footer">Powered by deep learning models on GPU</span>
+  &nbsp;&middot;&nbsp;
+  <a href="/docs" style="color:#52525b;text-decoration:none" onmouseover="this.style.color='#00c6ee'" onmouseout="this.style.color='#52525b'">API Docs</a>
 </footer>
 
 <script>
@@ -601,71 +527,59 @@ const LANG = {
     logo: 'Deepfake Detector',
     title: 'AI Content Detector',
     subtitle: 'Upload an image, audio, or video to instantly check if it was generated by AI.',
-    tab_image: 'Image',
-    tab_audio: 'Audio',
-    tab_video: 'Video',
+    tab_image: 'Image', tab_audio: 'Audio', tab_video: 'Video',
     dropzone_text: 'Drop your file here or <span>browse</span>',
-    formats_image: 'JPG, PNG, WebP',
-    formats_audio: 'MP3, WAV, FLAC, OGG',
-    formats_video: 'MP4, AVI, MOV, MKV',
-    analyze_btn: 'Analyze',
-    analyze_image: 'Analyze Image',
-    analyze_audio: 'Analyze Audio',
-    analyze_video: 'Analyze Video',
-    analyzing: 'Analyzing with AI...',
-    confidence: 'confidence',
-    real: 'Real',
-    fake: 'Fake',
-    verdict_real: 'Likely Human-Created',
-    verdict_fake: 'Likely AI-Generated',
+    formats_image: 'JPG, PNG, WebP', formats_audio: 'MP3, WAV, FLAC, OGG', formats_video: 'MP4, AVI, MOV, MKV',
+    analyze_image: 'Analyze Image', analyze_audio: 'Analyze Audio', analyze_video: 'Analyze Video',
+    uploading: 'Uploading...', analyzing: 'Analyzing with AI...',
+    confidence: 'confidence', real: 'Real', fake: 'Fake',
+    verdict_real: 'Likely human-created content', verdict_fake: 'Likely AI-generated content',
+    model: 'Model', time: 'Time', file_size: 'File Size',
     reset_btn: 'Analyze another file',
+    try_examples: 'Try an example',
+    recent_history: 'Recent History', clear_history: 'Clear',
+    remaining: 'remaining today',
+    privacy: 'Your files are processed on GPU and deleted immediately. Nothing is stored.',
     footer: 'Powered by deep learning models on GPU',
     err_unsupported: 'Unsupported file type. Please upload an image, audio, or video file.',
-    err_wrong_tab: 'This file doesn\'t match the selected tab. Switched to',
-    err_network: 'Network error: ',
-    err_server: 'Server error',
+    err_network: 'Network error: ', err_server: 'Server error',
+    err_rate: 'Daily limit reached (10/day). Come back tomorrow!',
   },
   ko: {
-    logo: '\uB525\uD398\uC774\uD06C \uAC10\uC9C0\uAE30',
-    title: 'AI \uCF58\uD150\uCE20 \uAC80\uCD9C\uAE30',
-    subtitle: '\uC774\uBBF8\uC9C0, \uC624\uB514\uC624 \uB610\uB294 \uBE44\uB514\uC624\uB97C \uC5C5\uB85C\uB4DC\uD558\uC5EC AI\uB85C \uC0DD\uC131\uB41C \uCF58\uD150\uCE20\uC778\uC9C0 \uC989\uC2DC \uD655\uC778\uD558\uC138\uC694.',
-    tab_image: '\uC774\uBBF8\uC9C0',
-    tab_audio: '\uC624\uB514\uC624',
-    tab_video: '\uBE44\uB514\uC624',
-    dropzone_text: '\uD30C\uC77C\uC744 \uC5EC\uAE30\uC5D0 \uB4DC\uB86D\uD558\uAC70\uB098 <span>\uCC3E\uC544\uBCF4\uAE30</span>',
-    formats_image: 'JPG, PNG, WebP',
-    formats_audio: 'MP3, WAV, FLAC, OGG',
-    formats_video: 'MP4, AVI, MOV, MKV',
-    analyze_btn: '\uBD84\uC11D\uD558\uAE30',
-    analyze_image: '\uC774\uBBF8\uC9C0 \uBD84\uC11D',
-    analyze_audio: '\uC624\uB514\uC624 \uBD84\uC11D',
-    analyze_video: '\uBE44\uB514\uC624 \uBD84\uC11D',
-    analyzing: 'AI\uB85C \uBD84\uC11D \uC911...',
-    confidence: '\uC2E0\uB8B0\uB3C4',
-    real: '\uC9C4\uC9DC',
-    fake: '\uAC00\uC9DC',
-    verdict_real: '\uC0AC\uB78C\uC774 \uB9CC\uB4E0 \uCF58\uD150\uCE20\uC77C \uAC00\uB2A5\uC131\uC774 \uB192\uC2B5\uB2C8\uB2E4',
-    verdict_fake: 'AI\uB85C \uC0DD\uC131\uB41C \uCF58\uD150\uCE20\uC77C \uAC00\uB2A5\uC131\uC774 \uB192\uC2B5\uB2C8\uB2E4',
-    reset_btn: '\uB2E4\uB978 \uD30C\uC77C \uBD84\uC11D\uD558\uAE30',
-    footer: 'GPU \uAE30\uBC18 \uB525\uB7EC\uB2DD \uBAA8\uB378\uB85C \uAD6C\uB3D9\uB429\uB2C8\uB2E4',
-    err_unsupported: '\uC9C0\uC6D0\uB418\uC9C0 \uC54A\uB294 \uD30C\uC77C \uD615\uC2DD\uC785\uB2C8\uB2E4. \uC774\uBBF8\uC9C0, \uC624\uB514\uC624 \uB610\uB294 \uBE44\uB514\uC624 \uD30C\uC77C\uC744 \uC5C5\uB85C\uB4DC\uD574 \uC8FC\uC138\uC694.',
-    err_wrong_tab: '\uD30C\uC77C\uC774 \uC120\uD0DD\uB41C \uD0ED\uACFC \uC77C\uCE58\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uC804\uD658\uB428:',
-    err_network: '\uB124\uD2B8\uC6CC\uD06C \uC624\uB958: ',
-    err_server: '\uC11C\uBC84 \uC624\uB958',
+    logo: '\ub525\ud398\uc774\ud06c \uac10\uc9c0\uae30',
+    title: 'AI \ucf58\ud150\uce20 \uac80\ucd9c\uae30',
+    subtitle: '\uc774\ubbf8\uc9c0, \uc624\ub514\uc624 \ub610\ub294 \ube44\ub514\uc624\ub97c \uc5c5\ub85c\ub4dc\ud558\uc5ec AI\ub85c \uc0dd\uc131\ub41c \ucf58\ud150\uce20\uc778\uc9c0 \uc989\uc2dc \ud655\uc778\ud558\uc138\uc694.',
+    tab_image: '\uc774\ubbf8\uc9c0', tab_audio: '\uc624\ub514\uc624', tab_video: '\ube44\ub514\uc624',
+    dropzone_text: '\ud30c\uc77c\uc744 \uc5ec\uae30\uc5d0 \ub4dc\ub86d\ud558\uac70\ub098 <span>\ucc3e\uc544\ubcf4\uae30</span>',
+    formats_image: 'JPG, PNG, WebP', formats_audio: 'MP3, WAV, FLAC, OGG', formats_video: 'MP4, AVI, MOV, MKV',
+    analyze_image: '\uc774\ubbf8\uc9c0 \ubd84\uc11d', analyze_audio: '\uc624\ub514\uc624 \ubd84\uc11d', analyze_video: '\ube44\ub514\uc624 \ubd84\uc11d',
+    uploading: '\uc5c5\ub85c\ub4dc \uc911...', analyzing: 'AI\ub85c \ubd84\uc11d \uc911...',
+    confidence: '\uc2e0\ub8b0\ub3c4', real: '\uc9c4\uc9dc', fake: '\uac00\uc9dc',
+    verdict_real: '\uc0ac\ub78c\uc774 \ub9cc\ub4e0 \ucf58\ud150\uce20\uc77c \uac00\ub2a5\uc131\uc774 \ub192\uc2b5\ub2c8\ub2e4',
+    verdict_fake: 'AI\ub85c \uc0dd\uc131\ub41c \ucf58\ud150\uce20\uc77c \uac00\ub2a5\uc131\uc774 \ub192\uc2b5\ub2c8\ub2e4',
+    model: '\ubaa8\ub378', time: '\uc18c\uc694 \uc2dc\uac04', file_size: '\ud30c\uc77c \ud06c\uae30',
+    reset_btn: '\ub2e4\ub978 \ud30c\uc77c \ubd84\uc11d\ud558\uae30',
+    try_examples: '\uc608\uc2dc \ud30c\uc77c\ub85c \uc2dc\ub3c4\ud574 \ubcf4\uae30',
+    recent_history: '\ucd5c\uadfc \uae30\ub85d', clear_history: '\uc0ad\uc81c',
+    remaining: '\uc624\ub298 \ub0a8\uc740 \ud69f\uc218',
+    privacy: '\ud30c\uc77c\uc740 GPU\uc5d0\uc11c \ucc98\ub9ac\ub41c \ud6c4 \uc989\uc2dc \uc0ad\uc81c\ub429\ub2c8\ub2e4. \uc544\ubb34\uac83\ub3c4 \uc800\uc7a5\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.',
+    footer: 'GPU \uae30\ubc18 \ub525\ub7ec\ub2dd \ubaa8\ub378\ub85c \uad6c\ub3d9\ub429\ub2c8\ub2e4',
+    err_unsupported: '\uc9c0\uc6d0\ub418\uc9c0 \uc54a\ub294 \ud30c\uc77c \ud615\uc2dd\uc785\ub2c8\ub2e4.',
+    err_network: '\ub124\ud2b8\uc6cc\ud06c \uc624\ub958: ', err_server: '\uc11c\ubc84 \uc624\ub958',
+    err_rate: '\uc77c\uc77c \uc81c\ud55c\uc5d0 \ub3c4\ub2ec\ud588\uc2b5\ub2c8\ub2e4 (10\ud68c/\uc77c). \ub0b4\uc77c \ub2e4\uc2dc \uc2dc\ub3c4\ud574 \uc8fc\uc138\uc694!',
   }
 };
 
 let currentLang = 'en';
 let currentTab = 'image';
 let selectedFile = null;
+let examplesData = [];
 
 function setLang(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
   document.getElementById('langEn').classList.toggle('active', lang === 'en');
   document.getElementById('langKo').classList.toggle('active', lang === 'ko');
-
-  // Update all data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (LANG[lang][key] !== undefined) el.textContent = LANG[lang][key];
@@ -674,39 +588,34 @@ function setLang(lang) {
     const key = el.getAttribute('data-i18n-html');
     if (LANG[lang][key] !== undefined) el.innerHTML = LANG[lang][key];
   });
-
-  // Update tab-dependent text
   updateFormats();
   updateAnalyzeBtn();
+  renderExamples();
+  renderHistory();
 }
-
 function t(key) { return LANG[currentLang][key] || key; }
 
 // ---- Tabs ----
-const TAB_ACCEPTS = {
-  image: '.jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif',
-  audio: '.wav,.mp3,.flac,.ogg,.m4a,.aac,.wma',
-  video: '.mp4,.avi,.mov,.mkv,.webm,.flv,.wmv',
-};
-
 function setTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-  document.getElementById('fileInput').accept = TAB_ACCEPTS[tab];
   updateFormats();
   updateAnalyzeBtn();
 }
-
 function updateFormats() {
   document.getElementById('dropzoneFormats').textContent = t('formats_' + currentTab);
 }
-
 function updateAnalyzeBtn() {
-  const btn = document.getElementById('analyzeBtn');
-  btn.textContent = t('analyze_' + currentTab);
+  document.getElementById('analyzeBtn').textContent = t('analyze_' + currentTab);
 }
 
-// ---- File extensions ----
+// ---- Utils ----
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
 const IMAGE_EXTS = ['jpg','jpeg','png','webp','bmp','tiff','tif'];
 const AUDIO_EXTS = ['wav','mp3','flac','ogg','m4a','aac','wma'];
 const VIDEO_EXTS = ['mp4','avi','mov','mkv','webm','flv','wmv'];
@@ -719,7 +628,7 @@ function getModality(name) {
   return null;
 }
 
-// ---- DOM refs ----
+// ---- DOM ----
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('fileInput');
 const filePreview = document.getElementById('filePreview');
@@ -727,6 +636,9 @@ const filePreviewImg = document.getElementById('filePreviewImg');
 const fileName = document.getElementById('fileName');
 const fileBadge = document.getElementById('fileBadge');
 const analyzeBtn = document.getElementById('analyzeBtn');
+const uploadProgress = document.getElementById('uploadProgress');
+const uploadFill = document.getElementById('uploadFill');
+const uploadPct = document.getElementById('uploadPct');
 const spinner = document.getElementById('spinner');
 const result = document.getElementById('result');
 const verdict = document.getElementById('verdict');
@@ -739,37 +651,25 @@ const pctReal = document.getElementById('pctReal');
 const pctFake = document.getElementById('pctFake');
 const errorDiv = document.getElementById('error');
 const resetBtn = document.getElementById('resetBtn');
+const examplesSection = document.getElementById('examplesSection');
 
 // ---- File selection ----
 function selectFile(file) {
   const modality = getModality(file.name);
-  if (!modality) {
-    showError(t('err_unsupported'));
-    return;
-  }
-  // Auto-switch tab if needed
-  if (modality !== currentTab) {
-    setTab(modality);
-  }
+  if (!modality) { showError(t('err_unsupported')); return; }
+  if (modality !== currentTab) setTab(modality);
   selectedFile = file;
   fileName.textContent = file.name;
   fileBadge.textContent = t('tab_' + modality);
   fileBadge.className = 'file-badge ' + modality;
-
-  // Show image preview
   if (modality === 'image') {
     const reader = new FileReader();
-    reader.onload = e => {
-      filePreviewImg.src = e.target.result;
-      filePreviewImg.style.display = 'block';
-    };
+    reader.onload = e => { filePreviewImg.src = e.target.result; filePreviewImg.style.display = 'block'; };
     reader.readAsDataURL(file);
-  } else {
-    filePreviewImg.style.display = 'none';
-  }
-
+  } else { filePreviewImg.style.display = 'none'; }
   filePreview.classList.add('visible');
   dropzone.style.display = 'none';
+  examplesSection.style.display = 'none';
   analyzeBtn.classList.add('visible');
   updateAnalyzeBtn();
   result.classList.remove('visible');
@@ -781,6 +681,7 @@ function showError(msg) {
   errorDiv.textContent = msg;
   errorDiv.classList.add('visible');
   spinner.classList.remove('visible');
+  uploadProgress.classList.remove('visible');
   resetBtn.classList.add('visible');
 }
 
@@ -790,80 +691,247 @@ function reset() {
   filePreview.classList.remove('visible');
   filePreviewImg.style.display = 'none';
   dropzone.style.display = '';
+  examplesSection.style.display = '';
   analyzeBtn.classList.remove('visible');
+  uploadProgress.classList.remove('visible');
   spinner.classList.remove('visible');
   result.classList.remove('visible');
   errorDiv.classList.remove('visible');
   resetBtn.classList.remove('visible');
 }
 
-// ---- Drag & drop ----
+// Drag & drop
 dropzone.addEventListener('click', () => fileInput.click());
 dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
 dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
 dropzone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropzone.classList.remove('dragover');
+  e.preventDefault(); dropzone.classList.remove('dragover');
   if (e.dataTransfer.files.length) selectFile(e.dataTransfer.files[0]);
 });
-fileInput.addEventListener('change', () => {
-  if (fileInput.files.length) selectFile(fileInput.files[0]);
-});
+fileInput.addEventListener('change', () => { if (fileInput.files.length) selectFile(fileInput.files[0]); });
 
-// ---- Analyze ----
-analyzeBtn.addEventListener('click', async () => {
+// ---- Analyze with upload progress (XHR) ----
+analyzeBtn.addEventListener('click', () => {
   if (!selectedFile) return;
   analyzeBtn.disabled = true;
   analyzeBtn.classList.remove('visible');
-  spinner.classList.add('visible');
-  result.classList.remove('visible');
   errorDiv.classList.remove('visible');
+  result.classList.remove('visible');
+  uploadProgress.classList.add('visible');
+  uploadFill.style.width = '0%';
+  uploadPct.textContent = '0%';
 
   const form = new FormData();
   form.append('file', selectedFile);
+  const uploadFileName = selectedFile.name;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/detect');
+
+  xhr.upload.onprogress = e => {
+    if (e.lengthComputable) {
+      const pct = Math.round((e.loaded / e.total) * 100);
+      uploadFill.style.width = pct + '%';
+      uploadPct.textContent = pct + '%';
+    }
+  };
+
+  xhr.upload.onload = () => {
+    uploadProgress.classList.remove('visible');
+    spinner.classList.add('visible');
+  };
+
+  xhr.onload = () => {
+    spinner.classList.remove('visible');
+    analyzeBtn.disabled = false;
+    try {
+      const data = JSON.parse(xhr.responseText);
+      if (xhr.status === 429) { showError(t('err_rate')); return; }
+      if (xhr.status !== 200) { showError(data.detail || t('err_server')); return; }
+      showResult(data, uploadFileName);
+    } catch (e) { showError(t('err_server')); }
+  };
+
+  xhr.onerror = () => {
+    spinner.classList.remove('visible');
+    uploadProgress.classList.remove('visible');
+    analyzeBtn.disabled = false;
+    showError(t('err_network') + 'connection failed');
+  };
+
+  xhr.send(form);
+});
+
+// ---- Show result ----
+function showResult(data, displayName) {
+  const v = data.verdict;
+  const conf = data.confidence;
+  const isReal = v === 'REAL';
+
+  verdict.textContent = v;
+  verdict.className = 'result-verdict ' + v.toLowerCase();
+  resultSublabel.textContent = isReal ? t('verdict_real') : t('verdict_fake');
+
+  const circumference = 2 * Math.PI * 55;
+  const offset = circumference - (conf / 100) * circumference;
+  gaugeCircle.style.strokeDashoffset = offset;
+  gaugeCircle.className.baseVal = 'gauge-ring-fill ' + v.toLowerCase();
+  gaugePct.textContent = conf + '%';
+
+  barReal.style.width = data.probabilities.real + '%';
+  barFake.style.width = data.probabilities.fake + '%';
+  pctReal.textContent = data.probabilities.real + '%';
+  pctFake.textContent = data.probabilities.fake + '%';
+
+  // Details
+  if (data.details) {
+    document.getElementById('detailModel').textContent = data.details.model || '-';
+    document.getElementById('detailTime').textContent = data.details.processing_time_ms ? data.details.processing_time_ms + 'ms' : '-';
+    document.getElementById('detailSize').textContent = data.details.file_size_bytes ? formatBytes(data.details.file_size_bytes) : '-';
+  }
+
+  // Rate badge
+  if (data.remaining_today !== undefined) {
+    document.getElementById('rateCount').textContent = data.remaining_today;
+    document.getElementById('rateBadge').classList.add('visible');
+  }
+
+  result.classList.add('visible');
+  resetBtn.classList.add('visible');
+
+  // Save to history
+  addToHistory({
+    name: displayName || 'example',
+    verdict: v,
+    confidence: conf,
+    modality: data.modality,
+    model: data.details ? data.details.model : '',
+    time_ms: data.details ? data.details.processing_time_ms : 0,
+    ts: Date.now(),
+  });
+}
+
+// ---- Examples ----
+async function loadExamples() {
+  try {
+    const resp = await fetch('/api/examples');
+    const data = await resp.json();
+    examplesData = data.examples || [];
+    renderExamples();
+  } catch (e) { /* silently fail */ }
+}
+
+function renderExamples() {
+  const grid = document.getElementById('examplesGrid');
+  if (!examplesData.length) { examplesSection.style.display = 'none'; return; }
+  grid.innerHTML = '';
+  const ICONS = {
+    image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+    audio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+    video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>',
+  };
+  examplesData.forEach(ex => {
+    const btn = document.createElement('button');
+    btn.className = 'example-btn';
+    btn.onclick = () => runExample(ex.id, btn);
+    const label = currentLang === 'ko' ? ex.label_ko : ex.label;
+    let iconHTML;
+    if (ex.modality === 'image') {
+      iconHTML = `<img src="/api/examples/${ex.id}/thumb" alt="" style="width:100%;height:100%;object-fit:cover">`;
+    } else {
+      iconHTML = ICONS[ex.modality];
+    }
+    btn.innerHTML = `<div class="example-icon">${iconHTML}</div><div><span class="example-dot ${ex.expected}"></span>${label}</div>`;
+    grid.appendChild(btn);
+  });
+}
+
+async function runExample(id, btnEl) {
+  if (btnEl) btnEl.classList.add('loading');
+  dropzone.style.display = 'none';
+  examplesSection.style.display = 'none';
+  analyzeBtn.classList.remove('visible');
+  errorDiv.classList.remove('visible');
+  result.classList.remove('visible');
+  spinner.classList.add('visible');
 
   try {
-    const resp = await fetch('/api/detect', { method: 'POST', body: form });
+    const resp = await fetch('/api/detect/example/' + id, { method: 'POST' });
     const data = await resp.json();
-    if (!resp.ok) {
-      showError(data.detail || t('err_server'));
-      analyzeBtn.disabled = false;
-      return;
-    }
     spinner.classList.remove('visible');
-
-    const v = data.verdict;
-    const conf = data.confidence;
-    const isReal = v === 'REAL';
-
-    verdict.textContent = v;
-    verdict.className = 'result-verdict ' + v.toLowerCase();
-    resultSublabel.textContent = isReal ? t('verdict_real') : t('verdict_fake');
-
-    // Circular gauge
-    const circumference = 2 * Math.PI * 60; // r=60
-    const offset = circumference - (conf / 100) * circumference;
-    gaugeCircle.style.strokeDashoffset = offset;
-    gaugeCircle.className.baseVal = 'gauge-ring-fill ' + v.toLowerCase();
-    gaugePct.textContent = conf + '%';
-
-    // Probability bars
-    barReal.style.width = data.probabilities.real + '%';
-    barFake.style.width = data.probabilities.fake + '%';
-    pctReal.textContent = data.probabilities.real + '%';
-    pctFake.textContent = data.probabilities.fake + '%';
-
-    result.classList.add('visible');
-    resetBtn.classList.add('visible');
+    if (resp.status === 429) { showError(t('err_rate')); return; }
+    if (!resp.ok) { showError(data.detail || t('err_server')); return; }
+    const ex = examplesData.find(e => e.id === id);
+    showResult(data, ex ? (currentLang === 'ko' ? ex.label_ko : ex.label) : id);
   } catch (e) {
+    spinner.classList.remove('visible');
     showError(t('err_network') + e.message);
+  } finally {
+    if (btnEl) btnEl.classList.remove('loading');
   }
-  analyzeBtn.disabled = false;
-});
+}
+
+// ---- History (localStorage) ----
+const HISTORY_KEY = 'dfdetector_history';
+const MAX_HISTORY = 10;
+
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+  catch { return []; }
+}
+function saveHistory(items) {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, MAX_HISTORY)));
+}
+function addToHistory(entry) {
+  const items = getHistory();
+  items.unshift(entry);
+  saveHistory(items);
+  renderHistory();
+}
+function clearHistory() {
+  localStorage.removeItem(HISTORY_KEY);
+  renderHistory();
+}
+function renderHistory() {
+  const items = getHistory();
+  const section = document.getElementById('historySection');
+  const list = document.getElementById('historyList');
+  if (!items.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  list.innerHTML = '';
+  items.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'history-item';
+    const ago = timeAgo(item.ts);
+    el.innerHTML = `
+      <div class="history-verdict ${item.verdict.toLowerCase()}">${item.verdict}</div>
+      <div class="history-info">
+        <div class="history-name">${escapeHtml(item.name)}</div>
+        <div class="history-meta">${t('tab_' + item.modality)} &middot; ${ago}</div>
+      </div>
+      <div class="history-conf">${item.confidence}%</div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  if (diff < 60000) return currentLang === 'ko' ? '\ubc29\uae08' : 'just now';
+  if (diff < 3600000) { const m = Math.floor(diff/60000); return currentLang === 'ko' ? m+'\ubd84 \uc804' : m+'m ago'; }
+  if (diff < 86400000) { const h = Math.floor(diff/3600000); return currentLang === 'ko' ? h+'\uc2dc\uac04 \uc804' : h+'h ago'; }
+  const d = Math.floor(diff/86400000); return currentLang === 'ko' ? d+'\uc77c \uc804' : d+'d ago';
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
 
 // ---- Init ----
 updateFormats();
 updateAnalyzeBtn();
+loadExamples();
+renderHistory();
 </script>
 </body>
 </html>

@@ -5,20 +5,50 @@ import importlib.util
 import os
 import sys
 import tempfile
+import time
+from collections import defaultdict
+from datetime import date
 from pathlib import Path
 
 import cv2
 import numpy as np
 import torch
 import torchaudio
-from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi.responses import FileResponse, HTMLResponse
 
 APP_DIR = Path(__file__).resolve().parent
+EXAMPLES_DIR = APP_DIR / "examples"
+
+# ---------------------------------------------------------------------------
+# Rate limiting — 10 free detections per IP per day
+# ---------------------------------------------------------------------------
+DAILY_LIMIT = 10
+_rate_counts: dict[str, dict] = defaultdict(lambda: {"date": None, "count": 0})
+
+
+def check_rate_limit(ip: str) -> tuple[bool, int]:
+    """Returns (allowed, remaining)."""
+    today = date.today().isoformat()
+    entry = _rate_counts[ip]
+    if entry["date"] != today:
+        entry["date"] = today
+        entry["count"] = 0
+    if entry["count"] >= DAILY_LIMIT:
+        return False, 0
+    entry["count"] += 1
+    return True, DAILY_LIMIT - entry["count"]
+
 
 # ---------------------------------------------------------------------------
 # Model loading via importlib (avoids name collisions between model.py files)
 # ---------------------------------------------------------------------------
+MODEL_NAMES = {
+    "image": "CLIP ViT-B/16",
+    "audio": "Wav2Vec2-Base",
+    "video": "CLIP ViT-B/16 (temporal)",
+}
+
 
 def _load_module(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -80,20 +110,16 @@ def preprocess_image(file_path: str, device: torch.device) -> torch.Tensor:
         raise ValueError("Could not read image file")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
-    # HWC uint8 → CHW float [0, 255]
     tensor = torch.from_numpy(img).permute(2, 0, 1).float().unsqueeze(0)
     return tensor.to(device)
 
 
 def preprocess_audio(file_path: str, device: torch.device) -> torch.Tensor:
     waveform, sr = torchaudio.load(file_path)
-    # Convert to mono
     if waveform.shape[0] > 1:
         waveform = waveform.mean(dim=0, keepdim=True)
-    # Resample to 16kHz
     if sr != AUDIO_SR:
         waveform = torchaudio.functional.resample(waveform, sr, AUDIO_SR)
-    # Center-crop or pad to AUDIO_SAMPLES
     length = waveform.shape[1]
     if length > AUDIO_SAMPLES:
         start = (length - AUDIO_SAMPLES) // 2
@@ -113,11 +139,8 @@ def preprocess_video(file_path: str, device: torch.device) -> torch.Tensor:
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     if total_frames <= 0:
         raise ValueError("Video has no frames")
-
-    # Select up to VIDEO_MAX_FRAMES evenly spaced
     n_frames = min(total_frames, VIDEO_MAX_FRAMES)
     indices = np.linspace(0, total_frames - 1, n_frames, dtype=int)
-
     frames = []
     for idx in indices:
         cap.set(cv2.CAP_PROP_POS_FRAMES, int(idx))
@@ -128,20 +151,73 @@ def preprocess_video(file_path: str, device: torch.device) -> torch.Tensor:
         frame = cv2.resize(frame, (IMG_SIZE, IMG_SIZE))
         frames.append(torch.from_numpy(frame).permute(2, 0, 1).float())
     cap.release()
-
     if not frames:
         raise ValueError("Could not extract any frames from video")
-
-    # Stack as (1, T, 3, 224, 224)
     tensor = torch.stack(frames).unsqueeze(0)
     return tensor.to(device)
+
+
+def _run_inference(file_path: str, modality: str) -> dict:
+    """Run inference on a file. Returns result dict with timing."""
+    file_size = os.path.getsize(file_path)
+    t0 = time.perf_counter()
+
+    if modality == "image":
+        tensor = preprocess_image(file_path, device)
+    elif modality == "audio":
+        tensor = preprocess_audio(file_path, device)
+    else:
+        tensor = preprocess_video(file_path, device)
+
+    with torch.no_grad():
+        logits = models[modality](tensor)
+        probs = torch.softmax(logits, dim=1)[0]
+
+    elapsed = time.perf_counter() - t0
+    real_prob = probs[0].item()
+    fake_prob = probs[1].item()
+    is_real = real_prob > fake_prob
+    confidence = max(real_prob, fake_prob)
+
+    return {
+        "verdict": "REAL" if is_real else "FAKE",
+        "confidence": round(confidence * 100, 2),
+        "modality": modality,
+        "probabilities": {
+            "real": round(real_prob * 100, 2),
+            "fake": round(fake_prob * 100, 2),
+        },
+        "details": {
+            "model": MODEL_NAMES[modality],
+            "processing_time_ms": round(elapsed * 1000),
+            "file_size_bytes": file_size,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# Example files
+# ---------------------------------------------------------------------------
+
+EXAMPLES = [
+    {"id": "real_face", "file": "real_face.jpg", "label": "Real Photo", "label_ko": "실제 사진", "modality": "image", "expected": "real"},
+    {"id": "fake_face", "file": "fake_face.jpg", "label": "AI Face", "label_ko": "AI 얼굴", "modality": "image", "expected": "fake"},
+    {"id": "real_speech", "file": "real_speech.wav", "label": "Real Speech", "label_ko": "실제 음성", "modality": "audio", "expected": "real"},
+    {"id": "fake_speech", "file": "fake_speech.mp3", "label": "TTS Speech", "label_ko": "TTS 음성", "modality": "audio", "expected": "fake"},
+    {"id": "real_video", "file": "real_video.mp4", "label": "Real Video", "label_ko": "실제 영상", "modality": "video", "expected": "real"},
+    {"id": "fake_video", "file": "fake_video.mp4", "label": "Deepfake", "label_ko": "딥페이크", "modality": "video", "expected": "fake"},
+]
 
 
 # ---------------------------------------------------------------------------
 # FastAPI app
 # ---------------------------------------------------------------------------
 
-app = FastAPI(title="Deepfake Detector")
+app = FastAPI(
+    title="Deepfake Detector API",
+    description="Detect AI-generated images, audio, and video using deep learning.",
+    version="1.0.0",
+)
 
 device: torch.device = None
 models: dict = {}
@@ -174,49 +250,92 @@ async def health():
 
 
 @app.post("/api/detect")
-async def detect(file: UploadFile = File(...)):
+async def detect(request: Request, file: UploadFile = File(...)):
+    # Rate limit
+    client_ip = request.headers.get("x-forwarded-for", request.client.host).split(",")[0].strip()
+    allowed, remaining = check_rate_limit(client_ip)
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail="Daily limit reached. You can perform 10 free detections per day.",
+        )
+
     try:
         modality = detect_modality(file.filename)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    # Save upload to temp file
     suffix = Path(file.filename).suffix
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         tmp.write(await file.read())
         tmp_path = tmp.name
 
     try:
-        if modality == "image":
-            tensor = preprocess_image(tmp_path, device)
-        elif modality == "audio":
-            tensor = preprocess_audio(tmp_path, device)
-        else:
-            tensor = preprocess_video(tmp_path, device)
-
-        model = models[modality]
         async with gpu_lock:
-            with torch.no_grad():
-                logits = model(tensor)
-                probs = torch.softmax(logits, dim=1)[0]
-
-        real_prob = probs[0].item()
-        fake_prob = probs[1].item()
-        verdict = "REAL" if real_prob > fake_prob else "FAKE"
-        confidence = max(real_prob, fake_prob)
-
-        return {
-            "verdict": verdict,
-            "confidence": round(confidence * 100, 2),
-            "modality": modality,
-            "probabilities": {
-                "real": round(real_prob * 100, 2),
-                "fake": round(fake_prob * 100, 2),
-            },
-        }
+            result = _run_inference(tmp_path, modality)
+        result["remaining_today"] = remaining
+        return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Inference error: {e}")
     finally:
         os.unlink(tmp_path)
+
+
+@app.get("/api/examples")
+async def list_examples():
+    """List available example files for one-click testing."""
+    available = []
+    for ex in EXAMPLES:
+        path = EXAMPLES_DIR / ex["file"]
+        if path.exists():
+            available.append({
+                "id": ex["id"],
+                "label": ex["label"],
+                "label_ko": ex["label_ko"],
+                "modality": ex["modality"],
+                "expected": ex["expected"],
+                "file_size": path.stat().st_size,
+            })
+    return {"examples": available}
+
+
+@app.post("/api/detect/example/{example_id}")
+async def detect_example(example_id: str, request: Request):
+    """Run detection on a pre-loaded example file."""
+    client_ip = request.headers.get("x-forwarded-for", request.client.host).split(",")[0].strip()
+    allowed, remaining = check_rate_limit(client_ip)
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail="Daily limit reached. You can perform 10 free detections per day.",
+        )
+
+    ex = next((e for e in EXAMPLES if e["id"] == example_id), None)
+    if not ex:
+        raise HTTPException(status_code=404, detail="Example not found")
+    path = EXAMPLES_DIR / ex["file"]
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="Example file missing")
+
+    try:
+        async with gpu_lock:
+            result = _run_inference(str(path), ex["modality"])
+        result["remaining_today"] = remaining
+        result["example_id"] = example_id
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Inference error: {e}")
+
+
+@app.get("/api/examples/{example_id}/thumb")
+async def example_thumbnail(example_id: str):
+    """Serve example file thumbnail / file."""
+    ex = next((e for e in EXAMPLES if e["id"] == example_id), None)
+    if not ex:
+        raise HTTPException(status_code=404, detail="Example not found")
+    path = EXAMPLES_DIR / ex["file"]
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="File missing")
+    return FileResponse(path)
