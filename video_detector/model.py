@@ -3,23 +3,19 @@ import torch.nn as nn
 import timm
 from safetensors.torch import load_file
 
-
 class VideoDeepfakeDetector(nn.Module):
     def __init__(self, num_classes=2):
         super().__init__()
-        self.register_buffer('mean', torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
-        self.register_buffer('std', torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
-        self.encoder = timm.create_model('vit_base_patch16_clip_224.openai', pretrained=False, num_classes=0)
+        self.register_buffer("mean", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
+        self.register_buffer("std", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
+        self.encoder = timm.create_model("vit_base_patch16_clip_224.openai", pretrained=False, num_classes=0)
         feature_dim = self.encoder.num_features
         self.classifier = nn.Sequential(
-            nn.LayerNorm(feature_dim),
-            nn.Dropout(0.3),
-            nn.Linear(feature_dim, 256),
-            nn.GELU(),
-            nn.Dropout(0.2),
+            nn.LayerNorm(feature_dim), nn.Dropout(0.3),
+            nn.Linear(feature_dim, 256), nn.GELU(), nn.Dropout(0.2),
             nn.Linear(256, num_classes)
         )
-        self.register_buffer('temperature', torch.ones(1))
+        self.register_buffer("temperature", torch.ones(1))
 
     def forward(self, x):
         if x.dim() == 4:
@@ -32,7 +28,6 @@ class VideoDeepfakeDetector(nn.Module):
         features = features.view(B, T, -1)
         pooled = features.mean(dim=1)
         return self.classifier(pooled) / self.temperature
-
 
 def load_model(weights_path, num_classes=2):
     model = VideoDeepfakeDetector(num_classes=num_classes)
