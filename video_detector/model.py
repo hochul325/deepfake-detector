@@ -10,6 +10,11 @@ class VideoDeepfakeDetector(nn.Module):
         self.register_buffer("std", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
         self.encoder = timm.create_model("vit_base_patch16_clip_224.openai", pretrained=False, num_classes=0)
         feature_dim = self.encoder.num_features
+        self.temporal_attention = nn.Sequential(
+            nn.Linear(feature_dim, 128),
+            nn.Tanh(),
+            nn.Linear(128, 1)
+        )
         self.classifier = nn.Sequential(
             nn.LayerNorm(feature_dim), nn.Dropout(0.3),
             nn.Linear(feature_dim, 256), nn.GELU(), nn.Dropout(0.2),
@@ -26,7 +31,9 @@ class VideoDeepfakeDetector(nn.Module):
         frames = (frames - self.mean) / self.std
         features = self.encoder(frames)
         features = features.view(B, T, -1)
-        pooled = features.mean(dim=1)
+        # Attention-weighted temporal pooling
+        attn = torch.softmax(self.temporal_attention(features), dim=1)
+        pooled = (features * attn).sum(dim=1)
         return self.classifier(pooled) / self.temperature
 
 def load_model(weights_path, num_classes=2):
